@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+cp chat_reference/config/prod.exs boulder_elixir_chat/config
+cp chat_reference/Procfile boulder_elixir_chat
+cp chat_reference/web/channels/user_socket.ex boulder_elixir_chat/web/channels
+
+cd boulder_elixir_chat
+heroku create --buildpack "https://github.com/HashNuke/heroku-buildpack-elixir.git"
+heroku buildpacks:add https://github.com/gjaldon/heroku-buildpack-phoenix-static.git
+heroku config:set SECRET_KEY_BASE=$(mix phoenix.gen.secret)
